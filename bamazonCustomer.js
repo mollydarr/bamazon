@@ -77,18 +77,18 @@ function buyProduct() {
                         var productInfo = data[0];
 
                         if (purchaseQty <= productInfo.stock_quantity) {
-                            console.log("PLACEHOLDER MESSAGE - ITEM ORDER SUCCESS")
+                            console.log("Thank you for the order!")
 
                             var updateTable = "UPDATE products SET stock_quantity = " + (productInfo.stock_quantity - purchaseQty) + " WHERE id = " + chosenItem;
 
                             connection.query(updateTable, function (err, data) {
                                 if (err) throw err;
-
-                                console.log("PLACEHOLDER MESSAGE #2");
+                                var orderTotal = productInfo.price*purchaseQty;
+                                console.log(`Your total is $${orderTotal}`);
                                 connection.end();
                             })
                         } else {
-                            console.log("SORRY NOT ENOUGH IN STOCK");
+                            console.log("I'm sorry, we do not have enough of that item in stock.");
                             readProducts();
                         }
                     }
