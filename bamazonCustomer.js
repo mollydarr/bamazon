@@ -13,7 +13,6 @@ var connection = mysql.createConnection({
 // connect to the mysql server and sql database
 connection.connect(function (err) {
     if (err) throw err;
-    // run the start function after the connection is made to prompt the user
     readProducts();
 });
 
@@ -68,20 +67,20 @@ function buyProduct() {
 
                 var query = "SELECT * FROM products WHERE ?";
 
-                connection.query(query, { id: chosenItem }, function (err, data) {
+                connection.query(query, { id: chosenItem }, function (err, res) {
                     if (err) throw err;
 
-                    if (data.length === 0) {
+                    if (res.length === 0) {
                         console.log("Please select a valid item ID");
                     } else {
-                        var productInfo = data[0];
+                        var productInfo = res[0];
 
                         if (purchaseQty <= productInfo.stock_quantity) {
                             console.log("Thank you for the order!")
 
                             var updateTable = "UPDATE products SET stock_quantity = " + (productInfo.stock_quantity - purchaseQty) + " WHERE id = " + chosenItem;
 
-                            connection.query(updateTable, function (err, data) {
+                            connection.query(updateTable, function (err, res) {
                                 if (err) throw err;
                                 var orderTotal = productInfo.price*purchaseQty;
                                 console.log(`Your total is $${orderTotal}`);
