@@ -79,11 +79,15 @@ function buyProduct() {
                             console.log("Thank you for the order!")
 
                             var updateTable = "UPDATE products SET stock_quantity = " + (productInfo.stock_quantity - purchaseQty) + " WHERE id = " + chosenItem;
-
+                            var orderTotal = productInfo.price * purchaseQty;
                             connection.query(updateTable, function (err, res) {
                                 if (err) throw err;
-                                var orderTotal = productInfo.price*purchaseQty;
                                 console.log(`Your total is $${orderTotal}`);
+                            });
+                            var productSales = productInfo.product_sales + orderTotal;
+                            var updateProductSales = "UPDATE products SET product_sales= " + productSales + " WHERE id = " + chosenItem;
+                            connection.query(updateProductSales, function (err, res) {
+                                if (err) throw err;
                                 connection.end();
                             })
                         } else {
